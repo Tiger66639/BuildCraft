@@ -61,6 +61,7 @@ import buildcraft.api.core.IWorldProperty;
 import buildcraft.api.crops.CropManager;
 import buildcraft.api.filler.FillerManager;
 import buildcraft.api.filler.IFillerPattern;
+import buildcraft.api.lists.ListRegistry;
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import buildcraft.api.statements.IActionExternal;
 import buildcraft.api.statements.IActionInternal;
@@ -127,13 +128,14 @@ import buildcraft.core.lib.network.ChannelHandler;
 import buildcraft.core.lib.render.FluidRenderer;
 import buildcraft.core.lib.utils.ColorUtils;
 import buildcraft.core.lib.utils.NBTUtils;
-import buildcraft.core.list.ListOreDictionaryCache;
 import buildcraft.core.lib.utils.Utils;
 import buildcraft.core.lib.utils.XorShift128Random;
+import buildcraft.core.list.ListMatchHandlerArmor;
 import buildcraft.core.list.ListMatchHandlerClass;
 import buildcraft.core.list.ListMatchHandlerFluid;
 import buildcraft.core.list.ListMatchHandlerOreDictionary;
-import buildcraft.core.list.ListRegistry;
+import buildcraft.core.list.ListMatchHandlerTools;
+import buildcraft.core.list.ListOreDictionaryCache;
 import buildcraft.core.list.ListTooltipHandler;
 import buildcraft.core.network.PacketHandlerCore;
 import buildcraft.core.properties.WorldPropertyIsDirt;
@@ -468,7 +470,7 @@ public class BuildCraftCore extends BuildCraftMod {
 			FillerManager.registry.addPattern(new PatternCylinder());
 			FillerManager.registry.addPattern(new PatternFrame());
 		} catch (Error error) {
-			BCLog.logErrorAPI("Buildcraft", error, IFillerPattern.class);
+			BCLog.logErrorAPI(error, IFillerPattern.class);
 			throw error;
 		}
 
@@ -479,12 +481,13 @@ public class BuildCraftCore extends BuildCraftMod {
 
 		ListRegistry.registerHandler(new ListMatchHandlerClass());
 		ListRegistry.registerHandler(new ListMatchHandlerFluid());
-		ListMatchHandlerClass.itemClasses.add(ItemFood.class);
+		ListRegistry.registerHandler(new ListMatchHandlerTools());
+		ListRegistry.registerHandler(new ListMatchHandlerArmor());
+		ListRegistry.itemClassAsType.add(ItemFood.class);
 	}
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		OreDictionary.registerOre("dustTinyRedstone", Blocks.fence_gate);
 		BCLog.logger.info("BuildCraft's fake player: UUID = " + gameProfile.getId().toString() + ", name = '" + gameProfile.getName() + "'!");
 
 		for (Object o : Block.blockRegistry) {

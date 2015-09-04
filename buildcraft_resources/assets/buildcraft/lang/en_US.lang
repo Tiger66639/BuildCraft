@@ -408,6 +408,7 @@ tile.engineWood.name=Redstone Engine
 tile.fillerBlock.name=Filler
 tile.filteredBufferBlock.name=Filtered Buffer
 tile.floodGateBlock.name=Flood Gate
+tile.flywheelBlock.name=Flywheel
 tile.frameBlock.name=Frame
 tile.integrationTableBlock.name=Integration Table
 tile.laserBlock.name=Laser
@@ -446,6 +447,7 @@ tip.gate.wires.diamond=Red, Blue, Green, Yellow
 tip.gate.wires.emerald=Red, Blue, Green, Yellow
 tip.gate.expansions=§9§oInstalled Expansions:
 
+tip.PipeFluidsClay=Fluid insertion pipe
 tip.PipeFluidsCobblestone=Won't connect to Stone or Quartz
 tip.PipeFluidsDiamond=Sorts fluids
 tip.PipeFluidsEmerald=Extraction pipe
@@ -546,6 +548,9 @@ bc_update.new_version=§cNew version of BuildCraft available: %s for Minecraft %
 bc_update.download=§cDownload from http://www.mod-buildcraft.com/download
 bc_update.once=This message only displays once
 bc_update.again=Type '/buildcraft version' if you want to see it again
+
+chat.buildcraft.quarry.tooSmall=[BuildCraft] Quarry size is outside of chunkloading bounds or too small %d %d (%d)
+chat.buildcraft.quarry.chunkloadInfo=[BuildCraft] The quarry at %d %d %d will keep %d chunks loaded
 
 command.buildcraft.version=BuildCraft %s for Minecraft %s (Latest: %s).
 command.buildcraft.changelog_header=Changelog for BuildCraft %s:

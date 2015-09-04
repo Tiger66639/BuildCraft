@@ -40,7 +40,8 @@ public abstract class Schematic {
 	public enum BuildingStage {
 		/**
 		 * Standalone blocks can be placed in the air, and they don't change
-		 * once placed.
+		 * once placed. This category also includes blocks which fall but can
+		 * support other blocks.
 		 */
 		STANDALONE,
 
@@ -154,6 +155,18 @@ public abstract class Schematic {
 	 */
 	public void initializeFromObjectAt(IBuilderContext context, int x, int y, int z) {
 
+	}
+
+	/**
+	 * Can the block be placed in the world at these coordinates now?
+	 * This function is only used to *delay* block placement until other
+	 * prerequisites are met.
+	 *
+	 * This should probably be used sparingly, in cases where the BuildStage
+	 * distinction is not enough.
+	 */
+	public boolean canPlaceInWorld(IBuilderContext context, int x, int y, int z) {
+		return true;
 	}
 
 	/**

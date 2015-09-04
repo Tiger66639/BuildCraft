@@ -16,9 +16,7 @@ import java.util.List;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -34,12 +32,12 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import buildcraft.api.boards.RedstoneBoardRegistry;
+import buildcraft.api.lists.ListRegistry;
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import buildcraft.api.robots.RobotManager;
 import buildcraft.api.statements.IActionInternal;
@@ -52,7 +50,6 @@ import buildcraft.core.DefaultProps;
 import buildcraft.core.InterModComms;
 import buildcraft.core.Version;
 import buildcraft.core.config.ConfigManager;
-import buildcraft.core.list.ListMatchHandlerClass;
 import buildcraft.core.network.EntityIds;
 import buildcraft.core.proxy.CoreProxy;
 import buildcraft.robotics.BlockRequester;
@@ -152,7 +149,6 @@ import buildcraft.robotics.statements.TriggerRobotInStation;
 import buildcraft.robotics.statements.TriggerRobotLinked;
 import buildcraft.robotics.statements.TriggerRobotSleep;
 import buildcraft.silicon.ItemRedstoneChipset;
-import buildcraft.transport.ItemPipe;
 
 @Mod(name = "BuildCraft Robotics", version = Version.VERSION, useMetadata = false, modid = "BuildCraft|Robotics", dependencies = DefaultProps.DEPENDENCY_CORE)
 public class BuildCraftRobotics extends BuildCraftMod {
@@ -238,7 +234,9 @@ public class BuildCraftRobotics extends BuildCraftMod {
 		RedstoneBoardRegistry.instance.registerBoardType(new BCBoardNBT("buildcraft:boardRobotButcher", "butcher", BoardRobotButcher.class, "blue"), 32000);
 		RedstoneBoardRegistry.instance.registerBoardType(new BCBoardNBT("buildcraft:shovelman", "shovelman", BoardRobotShovelman.class, "blue"), 32000);
 		RedstoneBoardRegistry.instance.registerBoardType(new BCBoardNBT("buildcraft:boardRobotPump", "pump", BoardRobotPump.class, "blue"), 32000);
-		RedstoneBoardRegistry.instance.registerBoardType(new BCBoardNBT("buildcraft:boardRobotBreaker", "breaker", BoardRobotBreaker.class, "blue"), 32000);
+
+		// TODO: Discuss this one!
+		//RedstoneBoardRegistry.instance.registerBoardType(new BCBoardNBT("buildcraft:boardRobotBreaker", "breaker", BoardRobotBreaker.class, "blue"), 32000);
 
 		// Even more expensive
 		// These handle complex multi-step operations.
@@ -342,7 +340,7 @@ public class BuildCraftRobotics extends BuildCraftMod {
 
 		RoboticsProxy.proxy.registerRenderers();
 
-		ListMatchHandlerClass.itemClasses.add(ItemRobot.class);
+		ListRegistry.itemClassAsType.add(ItemRobot.class);
 	}
 
 	public static void loadRecipes() {
@@ -432,6 +430,8 @@ public class BuildCraftRobotics extends BuildCraftMod {
 		manager = new MapManager(f);
 		managerThread = new Thread(manager);
 		managerThread.start();
+
+		BoardRobotPicker.onServerStart();
 
 		MinecraftForge.EVENT_BUS.register(manager);
 		FMLCommonHandler.instance().bus().register(manager);

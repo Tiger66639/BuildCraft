@@ -22,7 +22,6 @@ import buildcraft.api.transport.IPipeTile;
 import buildcraft.core.lib.utils.BitSetUtils;
 
 public abstract class PipeTransport {
-
 	public TileGenericPipe container;
 
 	protected boolean[] inputsOpen = new boolean[ForgeDirection.VALID_DIRECTIONS.length];

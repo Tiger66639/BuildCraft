@@ -62,8 +62,6 @@ public abstract class Pipe<T extends PipeTransport> implements IDropControlInven
 		this.item = item;
 
 		eventBus.registerHandler(this);
-		// TODO: Move to globalHandlers once a priority system is in place
-		eventBus.registerHandler(new LensFilterHandler());
 	}
 
 	public void setTile(TileEntity tile) {
@@ -220,7 +218,7 @@ public abstract class Pipe<T extends PipeTransport> implements IDropControlInven
 	public void updateSignalState() {
 		for (PipeWire c : PipeWire.values()) {
 			if (!wireSet[c.ordinal()]) {
-				return;
+				continue;
 			}
 
 			updateSignalState(c);

@@ -127,7 +127,7 @@ public class PipeTransportPower extends PipeTransport implements IDebuggable {
 	}
 
 	public boolean isPowerSource(TileEntity tile, ForgeDirection side) {
-		if (tile instanceof TileBuildCraft && !(tile instanceof IEngine)) {
+		if (tile instanceof TileBuildCraft && !(tile instanceof IEngine) && !(((TileBuildCraft) tile).emitsEnergy(side.getOpposite()))) {
 			// Disregard non-engine BC tiles.
 			// While this, of course, does nothing to work with other mods,
 			// it at least makes it work nicely with BC's built-in blocks while
@@ -226,12 +226,15 @@ public class PipeTransportPower extends PipeTransport implements IDebuggable {
 										watts);
 								internalPower[i] -= watts;
 								dbgEnergyOutput[j] += watts;
+
+								powerAverage[j].push((int) Math.ceil(watts));
+								powerAverage[i].push((int) Math.ceil(watts));
 							} else {
 								int iWatts = (int) watts;
 								if (ep instanceof IEnergyHandler) {
 									IEnergyHandler handler = (IEnergyHandler) ep;
 									if (handler.canConnectEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite())) {
-										watts = handler.receiveEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite(),
+										iWatts = handler.receiveEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite(),
 												iWatts, false);
 									}
 									internalPower[i] -= iWatts;
@@ -239,16 +242,16 @@ public class PipeTransportPower extends PipeTransport implements IDebuggable {
 								} else if (ep instanceof IEnergyReceiver) {
 									IEnergyReceiver handler = (IEnergyReceiver) ep;
 									if (handler.canConnectEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite())) {
-										watts = handler.receiveEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite(),
+										iWatts = handler.receiveEnergy(ForgeDirection.VALID_DIRECTIONS[j].getOpposite(),
 												iWatts, false);
 									}
 									internalPower[i] -= iWatts;
 									dbgEnergyOutput[j] += iWatts;
 								}
-							}
 
-							powerAverage[j].push((int) Math.ceil(watts));
-							powerAverage[i].push((int) Math.ceil(watts));
+								powerAverage[j].push(iWatts);
+								powerAverage[i].push(iWatts);
+							}
 						}
 					}
 				}
@@ -263,7 +266,7 @@ public class PipeTransportPower extends PipeTransport implements IDebuggable {
 			}
 		}
 
-		overload += highestPower > ((float) maxPower) * 0.95F ? 1 : -1;
+		overload += highestPower > (maxPower * 0.95F) ? 1 : -1;
 		if (overload < 0) {
 			overload = 0;
 		}
@@ -471,12 +474,12 @@ public class PipeTransportPower extends PipeTransport implements IDebuggable {
 	static {
 		powerCapacities.put(PipePowerCobblestone.class, 80);
 		powerCapacities.put(PipePowerStone.class, 160);
-		powerCapacities.put(PipePowerWood.class, 320);
+		powerCapacities.put(PipePowerWood.class, 10240);
         powerCapacities.put(PipePowerSandstone.class, 320);
 		powerCapacities.put(PipePowerQuartz.class, 640);
 		powerCapacities.put(PipePowerIron.class, 1280);
 		powerCapacities.put(PipePowerGold.class, 2560);
-		powerCapacities.put(PipePowerEmerald.class, 2560);
+		powerCapacities.put(PipePowerEmerald.class, 10240);
 		powerCapacities.put(PipePowerDiamond.class, 10240);
 
 		powerResistances.put(PipePowerCobblestone.class, 0.05F);

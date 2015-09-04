@@ -64,6 +64,7 @@ import buildcraft.core.lib.engines.TileEngineBase.EnergyStage;
 import buildcraft.core.lib.network.ChannelHandler;
 import buildcraft.core.lib.network.PacketHandler;
 import buildcraft.core.proxy.CoreProxy;
+import buildcraft.energy.BlockFlywheel;
 import buildcraft.energy.BucketHandler;
 import buildcraft.energy.EnergyGuiHandler;
 import buildcraft.energy.EnergyProxy;
@@ -72,6 +73,7 @@ import buildcraft.energy.ItemBucketBuildcraft;
 import buildcraft.energy.TileEngineCreative;
 import buildcraft.energy.TileEngineIron;
 import buildcraft.energy.TileEngineStone;
+import buildcraft.energy.TileFlywheel;
 import buildcraft.energy.fuels.CoolantManager;
 import buildcraft.energy.fuels.FuelManager;
 import buildcraft.energy.statements.EnergyStatementProvider;
@@ -93,6 +95,7 @@ public class BuildCraftEnergy extends BuildCraftMod {
 	public static Fluid fluidOil;
 	public static Fluid fluidFuel;
 	public static Fluid fluidRedPlasma;
+	public static Block blockFlywheel;
 	public static Block blockOil;
 	public static Block blockFuel;
 	public static Block blockRedPlasma;
@@ -123,7 +126,6 @@ public class BuildCraftEnergy extends BuildCraftMod {
 		BuildcraftFuelRegistry.fuel = FuelManager.INSTANCE;
 		BuildcraftFuelRegistry.coolant = CoolantManager.INSTANCE;
 
-		// TODO: Reload configs without having to close the game
 		int oilDesertBiomeId = BuildCraftCore.mainConfigManager.register("worldgen.biomes",
 				"biomeOilDesert", DefaultProps.BIOME_OIL_DESERT, "The id for the Oil Desert biome",
 				RestartRequirement.GAME).getInt();
@@ -181,6 +183,10 @@ public class BuildCraftEnergy extends BuildCraftMod {
 			}
 			biomeOilOcean = BiomeGenOilOcean.makeBiome(oilOceanBiomeId);
 		}
+
+		// Blocks
+		blockFlywheel = new BlockFlywheel().setBlockName("flywheelBlock");
+		CoreProxy.proxy.registerBlock(blockFlywheel);
 
 		// Oil and fuel
 		if (!FluidRegistry.isFluidRegistered("oil")) {
@@ -287,11 +293,13 @@ public class BuildCraftEnergy extends BuildCraftMod {
 		BuildcraftFuelRegistry.fuel.addFuel(fluidFuel, fuelFuelEnergyOutput, (int) (25000 * fuelFuelMultiplier));
 
 		BuildcraftFuelRegistry.coolant.addCoolant(FluidRegistry.WATER, 0.0023f);
-		BuildcraftFuelRegistry.coolant.addSolidCoolant(StackKey.stack(Blocks.ice), StackKey.fluid(FluidRegistry.WATER), 2f);
+		BuildcraftFuelRegistry.coolant.addSolidCoolant(StackKey.stack(Blocks.ice), StackKey.fluid(FluidRegistry.WATER), 1.5f);
+		BuildcraftFuelRegistry.coolant.addSolidCoolant(StackKey.stack(Blocks.packed_ice), StackKey.fluid(FluidRegistry.WATER), 2.0f);
 
 		BuildCraftCore.engineBlock.registerTile(TileEngineStone.class, "tile.engineStone");
 		BuildCraftCore.engineBlock.registerTile(TileEngineIron.class, "tile.engineIron");
 		BuildCraftCore.engineBlock.registerTile(TileEngineCreative.class, "tile.engineCreative");
+		CoreProxy.proxy.registerTileEntity(TileFlywheel.class, "tile.flywheel");
 
 		InterModComms.registerHandler(new IMCHandlerEnergy());
 
@@ -419,6 +427,8 @@ public class BuildCraftEnergy extends BuildCraftMod {
 		CoreProxy.proxy.addCraftingRecipe(new ItemStack(BuildCraftCore.engineBlock, 1, 2),
 				"www", " g ", "GpG", 'w', "ingotIron",
 				'g', "blockGlass", 'G', "gearIron", 'p', Blocks.piston);
+		CoreProxy.proxy.addCraftingRecipe(new ItemStack(blockFlywheel),
+				"p", "g", "s", 'p', Blocks.heavy_weighted_pressure_plate, 's', Blocks.piston, 'g', "gearStone");
 	}
 
 	private int findUnusedBiomeID(String biomeName) {
