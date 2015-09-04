@@ -149,8 +149,12 @@ public class ListHandlerOld {
 
 				List list = new LinkedList();
 
-				for (CreativeTabs tab : item.getCreativeTabs()) {
-					item.getSubItems(item, tab, list);
+				try {
+					for (CreativeTabs tab : item.getCreativeTabs()) {
+						item.getSubItems(item, tab, list);
+					}
+				} catch (Exception e) {
+
 				}
 
 				if (list.size() > 0) {

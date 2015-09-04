@@ -47,7 +47,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IInventory,
 	public List<CraftingResult<ItemStack>> getPotentialOutputs() {
 		List<CraftingResult<ItemStack>> result = new LinkedList<CraftingResult<ItemStack>>();
 
-		for (IFlexibleRecipe recipe : AssemblyRecipeManager.INSTANCE.getRecipes()) {
+		for (IFlexibleRecipe<ItemStack> recipe : AssemblyRecipeManager.INSTANCE.getRecipes()) {
 			CraftingResult<ItemStack> r = recipe.craft(this, true);
 
 			if (r != null) {
@@ -77,6 +77,9 @@ public class TileAssemblyTable extends TileLaserTableBase implements IInventory,
 		}
 
 		if (currentRecipe == null) {
+			/* if (getEnergy() >= 50) {
+				setEnergy(Math.max(0, getEnergy() - 50));
+			} */
 			return;
 		}
 
@@ -89,10 +92,10 @@ public class TileAssemblyTable extends TileLaserTableBase implements IInventory,
 		}
 
 		if (getEnergy() >= currentRecipe.craft(this, true).energyCost) {
-			setEnergy(0);
-
 			if (currentRecipe.canBeCrafted(this)) {
-				outputStack(currentRecipe.craft(this, false).crafted.copy(), true);
+				CraftingResult<ItemStack> result = currentRecipe.craft(this, false);
+				setEnergy(Math.max(0, getEnergy() - result.energyCost));
+				outputStack(result.crafted.copy(), true);
 
 				setNextCurrentRecipe();
 			}
@@ -209,7 +212,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IInventory,
 		}
 	}
 
-	public boolean isPlanned(IFlexibleRecipe recipe) {
+	public boolean isPlanned(IFlexibleRecipe<ItemStack> recipe) {
 		if (recipe == null) {
 			return false;
 		}
@@ -217,7 +220,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IInventory,
 		return plannedOutput.contains(recipe.getId());
 	}
 
-	public boolean isAssembling(IFlexibleRecipe recipe) {
+	public boolean isAssembling(IFlexibleRecipe<ItemStack> recipe) {
 		return recipe != null && recipe == currentRecipe;
 	}
 

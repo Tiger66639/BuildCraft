@@ -124,6 +124,7 @@ import buildcraft.core.lib.commands.RootCommand;
 import buildcraft.core.lib.engines.ItemEngine;
 import buildcraft.core.lib.engines.TileEngineBase;
 import buildcraft.core.lib.network.ChannelHandler;
+import buildcraft.core.lib.render.FluidRenderer;
 import buildcraft.core.lib.utils.ColorUtils;
 import buildcraft.core.lib.utils.NBTUtils;
 import buildcraft.core.list.ListOreDictionaryCache;
@@ -152,6 +153,7 @@ import buildcraft.core.recipes.ProgrammingRecipeManager;
 import buildcraft.core.recipes.RefineryRecipeManager;
 import buildcraft.core.render.BlockHighlightHandler;
 import buildcraft.core.render.RenderLEDTile;
+import buildcraft.core.render.RenderLaser;
 import buildcraft.core.statements.ActionMachineControl;
 import buildcraft.core.statements.ActionRedstoneOutput;
 import buildcraft.core.statements.DefaultActionProvider;
@@ -588,6 +590,13 @@ public class BuildCraftCore extends BuildCraftMod {
 			BuildCraftCore.transparentTexture = event.map.registerIcon("buildcraftcore:misc/transparent");
 			RenderLEDTile.registerBlockIcons(event.map);
 		}
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void textureHook(TextureStitchEvent.Post event) {
+		FluidRenderer.onTextureReload();
+		RenderLaser.onTextureReload();
 	}
 
 	public void reloadConfig(ConfigManager.RestartRequirement restartType) {
