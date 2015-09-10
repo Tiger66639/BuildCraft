@@ -10,6 +10,6 @@
       <param name="username" value="root" />
     </trackerConnection>
   </issueTrackers>
-  <versionedSettings rootId="BuildCraft_HttpsGithubComTiger66639BuildCraftGitRefsHeads65x" enabled="true" showChanges="true" buildSettings="ALWAYS_USE_CURRENT" />
+  <versionedSettings rootId="BuildCraft_HttpsGithubComTiger66639BuildCraftGitRefsHeads65x" enabled="true" showChanges="true" buildSettings="PREFER_VCS" />
 </settings>
 
