@@ -11,5 +11,10 @@
     </trackerConnection>
   </issueTrackers>
   <versionedSettings rootId="BuildCraft_HttpsGithubComTiger66639BuildCraftGitRefsHeads65x" enabled="true" showChanges="true" buildSettings="PREFER_VCS" />
+  <report-tabs>
+    <report-tab title="BuildCraft" buildTypeId="BuildCraft_Build">
+      <revisionRule name="lastSuccessful" revision="latest.lastSuccessful" />
+    </report-tab>
+  </report-tabs>
 </settings>
 
