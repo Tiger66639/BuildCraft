@@ -4,6 +4,7 @@
   <description />
   <settings>
     <options>
+      <option name="artifactRules" value="dir/**/*.zip" />
       <option name="cleanBuild" value="true" />
       <option name="showDependenciesChanges" value="true" />
     </options>
