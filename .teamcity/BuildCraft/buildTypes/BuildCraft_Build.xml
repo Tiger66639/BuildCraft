@@ -26,7 +26,9 @@
       </runner>
     </build-runners>
     <vcs-settings>
-      <vcs-entry-ref root-id="BuildCraft_HttpsGithubComTiger66639BuildCraftGitRefsHeads65x" />
+      <vcs-entry-ref root-id="BuildCraft_HttpsGithubComTiger66639BuildCraftGitRefsHeads65x">
+        <checkout-rule rule="+:buildcraft_resources/changelog =&gt; ." />
+      </vcs-entry-ref>
     </vcs-settings>
     <requirements />
     <build-triggers />
